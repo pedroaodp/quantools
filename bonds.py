@@ -7,11 +7,12 @@ cal = Brazil()
 
 
 class Titulos:
-    def __init__(self, taxa, c, start, end):
+    def __init__(self, taxa, start, end, c=0):
         """
-        param:
-        fv = Face Value
-        c = coupon
+        :param fv: Face Value
+        :param c: coupon
+        :param start: settlement date
+        :param end: Maturity date
         """
         self.fv = 1000
         self.taxa = taxa
