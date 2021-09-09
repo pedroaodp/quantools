@@ -5,11 +5,6 @@ import yfinance as yf
 
 
 
-fb = yf.Ticker("BOVA11.SA")
-hist = fb.history(start = "2012-01-01" , end= "2018-01-31")
-prices = pd.Series(hist["Close"])
-
-
 def log_returns(prices):
     """
     compute log returns for each ticker.
@@ -128,7 +123,3 @@ def tVaR(prices, ci, dof=0):
            "CVaR": CVaR}
 
     return VaR
-
-
-tvar = tVaR(prices, 90, dof=6)
-print(tvar)
