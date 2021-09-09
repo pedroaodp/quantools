@@ -7,43 +7,23 @@ import yfinance as yf
 
 def log_returns(prices):
     """
-    compute log returns for each ticker.
-
-    parameters
-     ----------
-    prices : dataframe or pandas séries
-    prices for each ticker and date
-
-     returns
-     -------
-    log_returns : dataframe
-    log returns for each ticker and date
-     """
+    compute a stock's  log return
+    
+    :param prices: Prices time series
+    :return: Log return
+    """
     log_return = np.log(prices) - np.log(prices.shift(1))
     return log_return
 
 
 def VaR(prices, ci, approach= 'p'):
     """
-    compute the stock's  Value at Risk using parametric or historical approach
-
-    parameters
-     ----------
-    prices : dataframe or pandas séries
-    prices for each ticker and date
-
-    ci: confidence interval
-    90%, 95%, and 99% confidence intervals
-
-    distribution: Normal or t-student approach
-    ditribution = 'p' : Parametric approach
-    distribution = 't': Historical approach
-
-     returns
-     -------
-    VaR : Scalar
-    Return the VaR number
-     """
+    compute a stock's  Value at Risk using parametric or historical approach.
+    
+    :param prices: Prices time series
+    :param ci: Confidence Interval
+    :return: Historical o Parametric VaR
+    """
     if ci > 1:
         ci = ci/100
     elif 0 < ci < 1:
@@ -69,25 +49,12 @@ def VaR(prices, ci, approach= 'p'):
 
 def CVaR(prices, ci):
     """
-        compute the stock's  Value at Risk using parametric approach
-
-        parameters
-         ----------
-        prices : dataframe or pandas séries
-        prices for each ticker and date
-
-        ci: confidence interval
-        90%, 95%, and 99% confidence intervals
-
-        distribution: Normal or t-student approach
-        ditribution = 'n' : Normal approach
-        distribution = 't': t-student approach
-
-         returns
-         -------
-        VaR : Scalar
-        Return the VaR number
-         """
+    This function return CVaR for a normal distribution 
+    
+    :param prices: Prices time serie
+    :param ci: Confidence Interval
+    :return: VaR and CVaR of a t-distribution
+    """
     if ci > 1:
         ci = ci / 100
     elif 0 < ci < 1:
@@ -103,7 +70,14 @@ def CVaR(prices, ci):
     return CVaR
 
 def tVaR(prices, ci, dof=0):
-
+    """
+    This function return VaR and CVaR for a t-student distribution 
+    
+        :param prices: Prices time series
+        :param ci: Confidence Interval
+        :param dof: Degrees of freedom
+        :return: VaR and CVaR of a t-distribution
+    """
     if ci > 1:
         ci = ci / 100
     elif 0 < ci < 1:
