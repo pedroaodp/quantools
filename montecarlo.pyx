@@ -20,18 +20,14 @@ cpdef random_walk_terminal(mu: double, sigma: double, S0: double, nt: int, paths
     cdef double dt = 1/252
     cdef int NtP = Nt +1
 
-
-    z = np.zeros(shape=(Nt, Np))
-
-    cdef int i
-    cdef int j
-    for i in range(Nt):
-        for j in range(Np):
-            z[i][j] = np.random.normal()
+    
+    z = np.random.normal(size=(Nt,Np))
 
     r = mu*dt + z*sigma*np.sqrt(dt)
     s = np.zeros(shape=(NtP, Np))
 
+    cdef int i
+    cdef int j
 
     for i in range(Nt):
         for j in range(Np):
@@ -63,27 +59,23 @@ cpdef random_walk_prices(double mu, double sigma, double S0, int nt, int paths):
 
     cdef double dt = 1/252
     cdef int NtP = Nt +1
-
-
-    z = np.zeros(shape=(Nt, Np))
-
-    cdef int i
-    cdef int j
-    for i in range(Nt):
-        for j in range(Np):
-            z[i][j] = np.random.normal()
+    
+    z = np.random.normal(size=(Nt,Np))
+    
 
     r = mu*dt + z*sigma*np.sqrt(dt)
     s = np.zeros(shape=(NtP, Np))
 
 
+    cdef int i
+    cdef int j
+    
     for i in range(Nt):
         for j in range(Np):
             s[i+1][j] = s[i][j]+r[i][j]
 
 
     price = s0*np.exp(s)
-    terminal_value = price[Nt,:] -1
 
     return price
 
@@ -155,6 +147,21 @@ cpdef movingaverage2(double mu, double sigma, double phi1, double phi2, double p
         r[t] = Mu + sigma*z[t] + phi1*z[t-1] + phi2*z[t-2] + phi3*z[t-3]
 
     return r
+
+def crossing(P):
+    """
+    Essa função conta o número de vezes em que o movimento de um
+    conjunto de série de preços passa o seu preço original
+    :param P:  série de preços
+    :return: contagem da média de vezes em que a série temporal passa do preço original
+    """
+    # Criando uma matrix para contar  os elementos
+    x = P * 0
+    Nt = len(P)
+    for t in range(3,Nt):
+        x[t,:] = (1 - np.sign(P[t,:]-P[1,:]) * np.sign(P[t-1,:]-P[1,:])) / 2
+    mean = np.mean(np.sum(x,axis=0))
+    return mean
 
 
 def derivative(mu, sigma, s0, nt, path, p=1):
